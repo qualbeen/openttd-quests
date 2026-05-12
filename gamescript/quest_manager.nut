@@ -157,12 +157,14 @@ function QuestManager::_ActivateAvailableQuests(company) {
 }
 
 function QuestManager::CompleteQuest(company, quest_id) {
+    if (!(company in this.companies)) return;
     this.companies[company].quest_states[quest_id] = "completed";
     GSLog.Info("Quest '" + quest_id + "' completed for company " + company);
     this._ActivateAvailableQuests(company);
 }
 
 function QuestManager::UnlockTier(company, tier) {
+    if (!(company in this.companies)) return;
     local already = false;
     foreach (ut in this.companies[company].unlocked_tiers) {
         if (ut == tier) { already = true; break; }
@@ -189,6 +191,7 @@ function QuestManager::AddSideQuest(quest) {
 }
 
 function QuestManager::CheckConditions(company, classifier) {
+    local mode = GSCompanyMode(company);
     local completed = [];
     local active = this.GetActiveQuests(company);
 
@@ -344,9 +347,8 @@ function QuestManager::_CheckConnectTownInternal(company, params) {
 
 function QuestManager::_CheckGrowTown(company, params) {
     local target = params.target;
-    local town_count = GSTown.GetTownCount();
-    for (local t = 0; t < town_count; t++) {
-        if (!GSTown.IsValidTown(t)) continue;
+    local tlist = GSTownList();
+    for (local t = tlist.Begin(); !tlist.IsEnd(); t = tlist.Next()) {
         if (GSTown.GetPopulation(t) >= target) return true;
     }
     return false;
@@ -380,12 +382,17 @@ function QuestManager::_CheckCompanyValue(company, params) {
 }
 
 function QuestManager::_CheckElectrifiedRail(company, params) {
-    local slist = GSStationList(GSStation.STATION_TRAIN);
-    local elec_stations = 0;
-    for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
-        elec_stations++;
+    local vlist = GSVehicleList();
+    for (local v = vlist.Begin(); !vlist.IsEnd(); v = vlist.Next()) {
+        if (GSVehicle.GetVehicleType(v) != GSVehicle.VT_RAIL) continue;
+        local engine = GSVehicle.GetEngineType(v);
+        local rail_type = GSEngine.GetRailType(engine);
+        local rt_name = GSRail.GetName(rail_type);
+        if (rt_name != null && (rt_name.tolower().find("elec") != null || rt_name.tolower().find("elrl") != null)) {
+            return true;
+        }
     }
-    return elec_stations >= 2;
+    return false;
 }
 
 function QuestManager::_CheckElectricTrainSpeed(company, params) {
@@ -457,12 +464,17 @@ function QuestManager::_CheckAllTransportTypes(company) {
 }
 
 function QuestManager::_CheckBuildMonorail(company, params) {
-    local slist = GSStationList(GSStation.STATION_TRAIN);
-    local mono_stations = 0;
-    for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
-        mono_stations++;
+    local vlist = GSVehicleList();
+    for (local v = vlist.Begin(); !vlist.IsEnd(); v = vlist.Next()) {
+        if (GSVehicle.GetVehicleType(v) != GSVehicle.VT_RAIL) continue;
+        local engine = GSVehicle.GetEngineType(v);
+        local rail_type = GSEngine.GetRailType(engine);
+        local rt_name = GSRail.GetName(rail_type);
+        if (rt_name != null && rt_name.tolower().find("mono") != null) {
+            return true;
+        }
     }
-    return mono_stations >= 2;
+    return false;
 }
 
 function QuestManager::_CheckMonorailSpeed(company, params) {
