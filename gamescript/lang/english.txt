@@ -1,0 +1,32 @@
+STR_GS_NAME                    :OpenTTD Quests
+
+STR_QUEST_COMPLETED            :{WHITE}Quest Completed: {STRING}
+STR_TIER_UNLOCKED              :{WHITE}Tier {COMMA} Unlocked: {STRING}!
+STR_QUEST_AVAILABLE            :{WHITE}New Quest Available: {STRING}
+
+STR_STORY_WELCOME_TITLE        :Welcome to OpenTTD Quests
+STR_STORY_WELCOME_TEXT         :{BLACK}You start with only buses and trucks. Complete quests to unlock trains, ships, aircraft, and more!{}{}Open the Goal window to track your active objectives.
+
+STR_STORY_TIER_TITLE           :Tier {COMMA} Unlocked — {STRING}
+STR_STORY_TIER_TEXT            :{BLACK}Congratulations! You've unlocked new vehicles and capabilities.{}{}Check the vehicle depot to see what's now available.
+
+STR_STORY_QUEST_TITLE          :{STRING}
+STR_STORY_QUEST_TEXT           :{BLACK}{STRING}
+STR_STORY_REWARD_TEXT          :{BLACK}Reward: {STRING}
+STR_STORY_COMPLETED_TEXT       :{BLACK}Quest completed! Well done.
+
+STR_GOAL_PROGRESS              :{STRING}: {COMMA}/{COMMA}
+STR_GOAL_COMPLETE              :{STRING}: Complete!
+
+STR_REWARD_CASH                :${COMMA} bonus
+STR_REWARD_UNLOCK_TIER         :Unlock Tier {COMMA}
+STR_REWARD_REPUTATION          :Town reputation boost
+STR_REWARD_VICTORY             :Victory!
+
+STR_TIER0_NAME                 :Getting Started
+STR_TIER1_NAME                 :The Iron Road
+STR_TIER2_NAME                 :Sea & Expansion
+STR_TIER3_NAME                 :Electrification
+STR_TIER4_NAME                 :Taking Flight
+STR_TIER5_NAME                 :Monorail Age
+STR_TIER6_NAME                 :Maglev Mastery

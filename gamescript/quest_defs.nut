@@ -1,0 +1,3 @@
+class QuestDefs {
+    static QUESTS = [];
+}
