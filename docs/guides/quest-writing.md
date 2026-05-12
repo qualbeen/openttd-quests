@@ -76,7 +76,9 @@ template:
 | Type | Parameters | Description |
 |------|-----------|-------------|
 | `transport_cargo` | `cargo`, `amount`, `from`, `to`, `transport_type` | Deliver cargo between locations |
-| `connect_towns` | `min_towns`, `transport_type` | Connect towns with transport links |
+| `connect_towns` | `min_towns`, `transport_type`, `min_network_tiles` | Connect towns with transport links, optionally requiring minimum network length |
+| `connect_town_internal` | `town`, `min_stops`, `min_passengers` | Build multiple stops within a single town's authority area and transport passengers between them |
+| `one_way_network` | `town`, `min_tiles`, `max_junction_pct` | Build a one-way street network in a town. Only straight one-way segments count; turns/crossings are excluded from the total but must stay under max_junction_pct (default 20%) |
 | `grow_town` | `town` (or `any`), `target_population` | Grow a town to a target size |
 | `build_station` | `min_platforms`, `transport_type` | Build a station meeting criteria |
 | `reach_profit` | `amount`, `period` | Reach a profit target |

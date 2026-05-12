@@ -84,40 +84,41 @@ This works with any NewGRF vehicle set — no hardcoded engine IDs.
 ### Tier 0 — Getting Started
 1. **"First Wheels"** — Buy your first vehicle. Reward: $10,000
 2. **"Bus Baron"** — Run a bus route earning $5,000/yr. Reward: $25,000
-3. **"Connect the Dots"** — Bus service to 3 towns. Reward: $30,000
-4. **"Trucker's Life"** *(gate)* — Deliver 200 cargo by truck. Reward: **Unlocks Tier 1**
+3. **"City Transit"** — Build 4+ bus stops within a single town (all within the same town's authority area) and transport 200 passengers between them. Reward: $20,000 + town reputation boost
+4. **"Connect the Dots"** — Bus service to 3 towns. Reward: $30,000
+5. **"Trucker's Life"** *(gate)* — Deliver 200 cargo by truck. Reward: **Unlocks Tier 1**
 
 ### Tier 1 — The Iron Road
-5. **"The Iron Road"** — Connect 2 towns by rail. Reward: $50,000
-6. **"Passenger Express"** — Transport 500 passengers by train. Reward: $40,000
-7. **"Growing Pains"** — Grow any town to 1,000 pop. Reward: Town reputation boost
-8. **"Rail Network"** *(gate)* — 5 towns by rail + $50,000 profit. Reward: **Unlocks Tier 2**
+6. **"The Iron Road"** — Connect 2 towns by rail, minimum 20 tiles of track. Reward: $50,000
+7. **"Passenger Express"** — Transport 500 passengers by train. Reward: $40,000
+8. **"Growing Pains"** — Grow any town to 1,000 pop. Reward: Town reputation boost
+9. **"Rail Network"** *(gate)* — 5 towns by rail, total network at least 100 tiles + $50,000 profit. Reward: **Unlocks Tier 2**
 
 ### Tier 2 — Sea & Expansion
-9. **"Set Sail"** — Build a dock and run a ship route. Reward: $60,000
-10. **"Oil Tycoon"** — Transport 500 oil by ship or train. Reward: $75,000
-11. **"Metropolis"** — Grow a town to 3,000 pop. Reward: Town reputation boost
-12. **"Trade Empire"** *(gate)* — $500k company value + 8 towns connected. Reward: **Unlocks Tier 3**
+10. **"Set Sail"** — Build a dock and run a ship route. Reward: $60,000
+11. **"Oil Tycoon"** — Transport 500 oil by ship or train. Reward: $75,000
+12. **"Metropolis"** — Grow a town to 3,000 pop. Reward: Town reputation boost
+13. **"Trade Empire"** *(gate)* — $500k company value + 8 towns connected. Reward: **Unlocks Tier 3**
 
 ### Tier 3 — Electrification
-13. **"Power Up"** — Build 20 tiles of electrified rail. Reward: $100,000
-14. **"High Speed"** — Run an electric train over 100 km/h. Reward: Reduced running costs (temporary)
-15. **"Megacity"** — Grow a town to 10,000 pop. Reward: Town reputation boost
-16. **"Industrial Giant"** *(gate)* — Transport 5 different cargo types + $1M value. Reward: **Unlocks Tier 4**
+14. **"Power Up"** — Build 20 tiles of electrified rail. Reward: $100,000
+15. **"High Speed"** — Run an electric train over 100 km/h. Reward: Reduced running costs (temporary)
+16. **"Megacity"** — Grow a town to 10,000 pop. Reward: Town reputation boost
+17. **"Industrial Giant"** *(gate)* — Transport 5 different cargo types + $1M value. Reward: **Unlocks Tier 4**
 
 ### Tier 4 — Taking Flight
-17. **"Wright Brothers"** — Build an airport and fly 1 aircraft. Reward: $150,000
-18. **"Air Bridge"** — Connect 2 cities 200+ tiles apart by air. Reward: $200,000
-19. **"Transport Mogul"** *(gate)* — 15 towns connected + all 4 transport types used. Reward: **Unlocks Tier 5**
+18. **"Wright Brothers"** — Build an airport and fly 1 aircraft. Reward: $150,000
+19. **"Air Bridge"** — Connect 2 cities 200+ tiles apart by air. Reward: $200,000
+20. **"Transport Mogul"** *(gate)* — 15 towns connected + all 4 transport types used. Reward: **Unlocks Tier 5**
 
 ### Tier 5 — Monorail Age
-20. **"The Future Is Now"** — Build 50+ tiles of monorail. Reward: $300,000
-21. **"Speed Demon"** — Monorail train over 200 km/h. Reward: $250,000
-22. **"Continental Network"** *(gate)* — 20 towns connected + $5M value. Reward: **Unlocks Tier 6**
+21. **"The Future Is Now"** — Build 50+ tiles of monorail. Reward: $300,000
+22. **"Speed Demon"** — Monorail train over 200 km/h. Reward: $250,000
+22. **"Continental Network"** *(gate)* — 20 towns connected, total network at least 500 tiles + $5M value. Reward: **Unlocks Tier 6**
 
 ### Tier 6 — Maglev Mastery
-23. **"Levitation"** — Build a maglev line and run a train. Reward: $500,000
-24. **"Master of Transport"** *(final)* — 30 towns, $10M value, 50k population served. Reward: Victory
+24. **"Levitation"** — Build a maglev line and run a train. Reward: $500,000
+25. **"Master of Transport"** *(final)* — 30 towns, $10M value, 50k population served. Reward: Victory
 
 ## Side Quests
 
@@ -140,6 +141,8 @@ Generated at game start from map data. Each side quest references actual towns a
 | Island Supply | 2 | Ship goods to the most remote town | $40k-60k |
 | Bulk Shipping | 2 | Ship {amount} cargo between ports | $45k-65k |
 | City Builder | 1 | Grow {Town} by {factor}x its starting population | $35k-50k |
+| Metro Service | 0 | Build {N} bus stops within {Town} (all in same authority area), transport {amount} passengers internally | $15k-30k |
+| One-Way System | 0 | Build a one-way street network in {Town} spanning {X}+ tiles. Only straight one-way segments count — turns and crossings are excluded. At most 20% of road tiles in the network may be turns/crossings | $20k-35k |
 | Jet Setter | 4 | Fly {amount} passengers between {City A} and {City B} | $80k-120k |
 
 ## Quest UI
