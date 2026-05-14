@@ -14,7 +14,7 @@ function Rewards::Apply(quest_id, company, quest_manager, classifier) {
         switch (reward.type) {
             case RewardType.CASH:
                 if (cash_enabled) {
-                    GSCompany.ChangeBankBalance(company, reward.amount, GSCompany.EXPENSES_OTHER);
+                    GSCompany.ChangeBankBalance(company, reward.amount, GSCompany.EXPENSES_OTHER, GSMap.TILE_INVALID);
                     GSLog.Info("Reward: $" + reward.amount + " to company " + company);
                 }
                 break;

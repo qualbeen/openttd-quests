@@ -3,16 +3,10 @@ class SaveLoad {
 
 function SaveLoad::SaveState(gs) {
     local data = {
-        version = 1,
+        version = 2,
         companies = {},
-        engine_tiers = {},
         side_quests = []
     };
-
-    foreach (engine_id, tier in gs.engine_classifier.engine_tiers) {
-        if (!(tier in data.engine_tiers)) data.engine_tiers[tier] <- [];
-        data.engine_tiers[tier].append(engine_id);
-    }
 
     foreach (company, state in gs.quest_manager.companies) {
         data.companies[company] <- {
@@ -68,22 +62,8 @@ function SaveLoad::LoadState(gs, data) {
         return;
     }
 
-    if ("engine_tiers" in data) {
-        gs.engine_classifier.engine_tiers = {};
-        gs.engine_classifier.tier_engines = {};
-        for (local t = 0; t <= 6; t++) {
-            gs.engine_classifier.tier_engines[t] <- [];
-        }
-
-        foreach (tier, engines in data.engine_tiers) {
-            tier = tier.tointeger();
-            foreach (engine_id in engines) {
-                gs.engine_classifier.engine_tiers[engine_id] <- tier;
-                gs.engine_classifier.tier_engines[tier].append(engine_id);
-            }
-        }
-        GSLog.Info("Loaded engine tiers from save.");
-    }
+    gs.engine_classifier.ClassifyAll();
+    GSLog.Info("Re-classified engines on load.");
 
     if ("side_quests" in data) {
         foreach (sq_data in data.side_quests) {

@@ -1,6 +1,13 @@
 class SideQuestGenerator {
 }
 
+function SideQuestGenerator::_Fmt(s, val) {
+    local pos = s.find("%s");
+    if (pos == null) pos = s.find("%d");
+    if (pos == null) return s;
+    return s.slice(0, pos) + val + s.slice(pos + 2);
+}
+
 function SideQuestGenerator::Generate(quest_manager) {
     local count = GSController.GetSetting("side_quest_count");
     if (count == 0) {
@@ -13,13 +20,15 @@ function SideQuestGenerator::Generate(quest_manager) {
     local templates = SideQuestGenerator._GetTemplates();
     local generated = 0;
     local attempt = 0;
+    local used_names = {};
 
     while (generated < count && attempt < count * 3) {
         attempt++;
         local tmpl = templates[generated % templates.len()];
         local quest = SideQuestGenerator._GenerateFromTemplate(tmpl, generated);
 
-        if (quest != null) {
+        if (quest != null && !(quest.name in used_names)) {
+            used_names[quest.name] <- true;
             quest_manager.AddSideQuest(quest);
             generated++;
             GSLog.Info("Generated side quest: " + quest.name);
@@ -139,16 +148,20 @@ function SideQuestGenerator::_PickTwoTowns(tmpl, index) {
     local name2 = GSTown.GetName(t2);
     local reward = tmpl.reward_min + GSBase.RandRange(tmpl.reward_max - tmpl.reward_min);
 
+    local qname = SideQuestGenerator._Fmt(tmpl.name_fmt, name2);
+    local desc = SideQuestGenerator._Fmt(SideQuestGenerator._Fmt(tmpl.desc_fmt, name1), name2);
+
     return {
         id = "side_" + index,
-        name = format(tmpl.name_fmt, name2),
+        name = qname,
         tier = tmpl.tier,
         prerequisites = [],
         objectives = [
-            { type = tmpl.check_type, params = tmpl.obj_params, desc = format(tmpl.desc_fmt, name1, name2) }
+            { type = tmpl.check_type, params = tmpl.obj_params, desc = desc }
         ],
         rewards = [{ type = RewardType.CASH, amount = reward }],
-        story = format(tmpl.desc_fmt, name1, name2) + ". The people are counting on you!"
+        story = desc + ". The people are counting on you!",
+        towns = [t1, t2]
     };
 }
 
@@ -168,16 +181,20 @@ function SideQuestGenerator::_PickTwoTownsFar(tmpl, index, min_dist) {
             local name2 = GSTown.GetName(t2);
             local reward = tmpl.reward_min + GSBase.RandRange(tmpl.reward_max - tmpl.reward_min);
 
+            local qname = SideQuestGenerator._Fmt(tmpl.name_fmt, name2);
+            local desc = SideQuestGenerator._Fmt(SideQuestGenerator._Fmt(tmpl.desc_fmt, name1), name2);
+
             return {
                 id = "side_" + index,
-                name = format(tmpl.name_fmt, name2),
+                name = qname,
                 tier = tmpl.tier,
                 prerequisites = [],
                 objectives = [
-                    { type = tmpl.check_type, params = tmpl.obj_params, desc = format(tmpl.desc_fmt, name1, name2) }
+                    { type = tmpl.check_type, params = tmpl.obj_params, desc = desc }
                 ],
                 rewards = [{ type = RewardType.CASH, amount = reward }],
-                story = format(tmpl.desc_fmt, name1, name2) + ". Show them what air travel can do!"
+                story = desc + ". Show them what air travel can do!",
+                towns = [t1, t2]
             };
         }
     }
@@ -207,16 +224,20 @@ function SideQuestGenerator::_PickIndustryAndTown(tmpl, index) {
     local town_name = GSTown.GetName(nearest_town);
     local reward = tmpl.reward_min + GSBase.RandRange(tmpl.reward_max - tmpl.reward_min);
 
+    local qname = SideQuestGenerator._Fmt(tmpl.name_fmt, ind_name);
+    local desc = SideQuestGenerator._Fmt(SideQuestGenerator._Fmt(tmpl.desc_fmt, ind_name), town_name);
+
     return {
         id = "side_" + index,
-        name = format(tmpl.name_fmt, ind_name),
+        name = qname,
         tier = tmpl.tier,
         prerequisites = [],
         objectives = [
-            { type = tmpl.check_type, params = tmpl.obj_params, desc = format(tmpl.desc_fmt, ind_name, town_name) }
+            { type = tmpl.check_type, params = tmpl.obj_params, desc = desc }
         ],
         rewards = [{ type = RewardType.CASH, amount = reward }],
-        story = "The folks in " + town_name + " need supplies from " + ind_name + ". Can you deliver?"
+        story = "The folks in " + town_name + " need supplies from " + ind_name + ". Can you deliver?",
+        towns = [nearest_town]
     };
 }
 
@@ -239,20 +260,23 @@ function SideQuestGenerator::_PickOneTown(tmpl, index) {
 
     local desc = "";
     if (tmpl.template == "city_builder") {
-        desc = format(tmpl.desc_fmt, name, params.target);
+        desc = SideQuestGenerator._Fmt(SideQuestGenerator._Fmt(tmpl.desc_fmt, name), params.target);
     } else {
-        desc = format(tmpl.desc_fmt, name);
+        desc = SideQuestGenerator._Fmt(tmpl.desc_fmt, name);
     }
+
+    local qname = SideQuestGenerator._Fmt(tmpl.name_fmt, name);
 
     return {
         id = "side_" + index,
-        name = format(tmpl.name_fmt, name),
+        name = qname,
         tier = tmpl.tier,
         prerequisites = [],
         objectives = [
             { type = tmpl.check_type, params = params, desc = desc }
         ],
         rewards = [{ type = RewardType.CASH, amount = reward }],
-        story = desc + ". A worthy challenge!"
+        story = desc + ". A worthy challenge!",
+        towns = [t]
     };
 }

@@ -5,7 +5,7 @@ class QuestSystemInfo extends GSInfo {
     function GetVersion()     { return 1; }
     function GetDate()        { return "2026-05-13"; }
     function CreateInstance() { return "QuestSystem"; }
-    function GetShortName()   { return "QUEST"; }
+    function GetShortName()   { return "QEST"; }
     function GetAPIVersion()  { return "14"; }
     function GetURL()         { return "https://github.com/qualbeen/openttd-quests"; }
 

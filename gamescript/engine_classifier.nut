@@ -56,36 +56,8 @@ function EngineClassifier::_ClassifyByType(vtype) {
 }
 
 function EngineClassifier::_ClassifyRoadVehicles(list) {
-    local prices = [];
-    local speeds = [];
-    local engines = [];
-
     for (local e = list.Begin(); !list.IsEnd(); e = list.Next()) {
-        local price = GSEngine.GetPrice(e);
-        local speed = GSEngine.GetMaxSpeed(e);
-        prices.append(price);
-        speeds.append(speed);
-        engines.append(e);
-    }
-
-    if (engines.len() == 0) return;
-
-    prices.sort(@(a, b) a <=> b);
-    speeds.sort(@(a, b) a <=> b);
-    local median_price = prices[prices.len() / 2];
-    local median_speed = speeds[speeds.len() / 2];
-
-    foreach (e in engines) {
-        local price = GSEngine.GetPrice(e);
-        local speed = GSEngine.GetMaxSpeed(e);
-
-        if (price <= median_price) {
-            this._Assign(e, 0);
-        } else if (speed <= median_speed) {
-            this._Assign(e, 1);
-        } else {
-            this._Assign(e, 4);
-        }
+        this._Assign(e, 0);
     }
 }
 
@@ -119,7 +91,7 @@ function EngineClassifier::_ClassifyTrains(list) {
     if (normal_engines.len() == 0) return;
 
     local sorted_speeds = clone normal_speeds;
-    sorted_speeds.sort(@(a, b) a <=> b);
+    sorted_speeds.sort(function(a, b) { if (a < b) return -1; if (a > b) return 1; return 0; });
     local median_speed = sorted_speeds[sorted_speeds.len() / 2];
 
     foreach (idx, e in normal_engines) {
@@ -180,9 +152,7 @@ function EngineClassifier::ApplyLocksForCompany(company, unlocked_tiers) {
         foreach (ut in unlocked_tiers) {
             if (ut == tier) { unlocked = true; break; }
         }
-        if (unlocked) {
-            GSEngine.EnableForCompany(engine_id, company);
-        } else {
+        if (!unlocked) {
             GSEngine.DisableForCompany(engine_id, company);
         }
     }

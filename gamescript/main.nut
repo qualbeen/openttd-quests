@@ -37,8 +37,8 @@ function QuestSystem::Start() {
             this.engine_classifier.UnlockTier(t);
         }
 
-        this.quest_manager.InitProgression(start_tier);
         SideQuestGenerator.Generate(this.quest_manager);
+        this.quest_manager.InitProgression(start_tier);
         GSLog.Info("New game initialized.");
     }
 

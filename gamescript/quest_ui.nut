@@ -16,6 +16,10 @@ function QuestUI::InitPages(quest_manager) {
 }
 
 function QuestUI::InitPagesForCompany(company, quest_manager) {
+    if (company in this.company_pages) {
+        GSLog.Info("Pages already exist for company " + company + ", skipping.");
+        return;
+    }
     this.company_pages[company] <- {};
     this.company_goals[company] <- {};
 
@@ -46,6 +50,16 @@ function QuestUI::_CreateQuestPage(company, quest) {
 
     foreach (obj in quest.objectives) {
         GSStoryPage.NewElement(page, GSStoryPage.SPET_TEXT, 0, GSText(GSText.STR_STORY_QUEST_TEXT, obj.desc));
+    }
+
+    if ("towns" in quest) {
+        foreach (town_id in quest.towns) {
+            if (GSTown.IsValidTown(town_id)) {
+                local loc = GSTown.GetLocation(town_id);
+                local tname = GSTown.GetName(town_id);
+                GSStoryPage.NewElement(page, GSStoryPage.SPET_LOCATION, loc, GSText(GSText.STR_STORY_QUEST_TEXT, tname));
+            }
+        }
     }
 
     local reward_desc = this._BuildRewardText(quest);
@@ -96,7 +110,11 @@ function QuestUI::_BuildRewardText(quest) {
 
 function QuestUI::OnQuestCompleted(quest_id, company, quest_manager) {
     if (company in this.company_goals && quest_id in this.company_goals[company]) {
-        foreach (goal_id in this.company_goals[company][quest_id]) {
+        local quest_for_goals = quest_manager.GetQuestDef(quest_id);
+        foreach (idx, goal_id in this.company_goals[company][quest_id]) {
+            if (quest_for_goals != null && idx < quest_for_goals.objectives.len()) {
+                GSGoal.SetText(goal_id, GSText(GSText.STR_GOAL_COMPLETE, quest_for_goals.objectives[idx].desc));
+            }
             GSGoal.SetCompleted(goal_id, true);
         }
     }
@@ -146,7 +164,9 @@ function QuestUI::UpdateProgress(company, quest_manager) {
             local goal_id = goal_ids[idx];
             if (!GSGoal.IsValidGoal(goal_id)) continue;
 
-            GSGoal.SetText(goal_id, GSText(GSText.STR_GOAL_PROGRESS, obj.desc, 0, 1));
+            local progress = quest_manager.GetObjectiveProgress(company, obj, quest);
+            local cur = progress.current < progress.target ? progress.current : progress.target;
+            GSGoal.SetText(goal_id, GSText(GSText.STR_GOAL_PROGRESS, obj.desc, cur, progress.target));
         }
     }
 }

@@ -23,6 +23,11 @@ function QuestManager::InitProgression(start_tier) {
 }
 
 function QuestManager::AddCompany(company, start_tier = 0) {
+    if (company in this.companies) {
+        GSLog.Info("Company " + company + " already initialized, skipping.");
+        return;
+    }
+
     local unlocked = [];
     for (local t = 0; t <= start_tier; t++) {
         unlocked.append(t);
@@ -45,7 +50,7 @@ function QuestManager::AddCompany(company, start_tier = 0) {
                 }
             }
 
-            if (quest.prerequisites.len() == 0 || quest.tier < start_tier) {
+            if (quest.tier < start_tier) {
                 this.companies[company].quest_states[quest.id] <- "completed";
             } else if (all_prereqs_met) {
                 this.companies[company].quest_states[quest.id] <- "available";
@@ -212,6 +217,82 @@ function QuestManager::CheckConditions(company, classifier) {
     return completed;
 }
 
+function QuestManager::GetObjectiveProgress(company, obj, quest) {
+    local mode = GSCompanyMode(company);
+    switch (obj.type) {
+        case ObjType.BUY_VEHICLE: {
+            local vlist = GSVehicleList();
+            return { current = vlist.Count() > 0 ? 1 : 0, target = 1 };
+        }
+        case ObjType.ROUTE_PROFIT: {
+            local best = 0;
+            local vlist = GSVehicleList();
+            for (local v = vlist.Begin(); !vlist.IsEnd(); v = vlist.Next()) {
+                if (GSVehicle.GetVehicleType(v) == obj.params.vehicle_type) {
+                    local p = GSVehicle.GetProfitLastYear(v);
+                    if (p > best) best = p;
+                }
+            }
+            return { current = best, target = obj.params.amount };
+        }
+        case ObjType.CONNECT_TOWNS_ROAD:
+        case ObjType.CONNECT_TOWNS_RAIL: {
+            local vtype = obj.type == ObjType.CONNECT_TOWNS_ROAD ? GSVehicle.VT_ROAD : GSVehicle.VT_RAIL;
+            local connected = {};
+            local slist = GSStationList(
+                vtype == GSVehicle.VT_ROAD ? GSStation.STATION_BUS_STOP : GSStation.STATION_TRAIN
+            );
+            for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
+                if (GSStation.HasCargoRating(s, 0)) {
+                    connected[GSStation.GetNearestTown(s)] <- true;
+                }
+            }
+            local count = 0;
+            foreach (t, _ in connected) count++;
+            local min_towns = "min_towns" in obj.params ? obj.params.min_towns : 1;
+            return { current = count, target = min_towns };
+        }
+        case ObjType.CONNECT_TOWN_INTERNAL: {
+            local best_stops = 0;
+            local town_stops = {};
+            local slist = GSStationList(GSStation.STATION_BUS_STOP);
+            for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
+                if (!GSStation.HasCargoRating(s, 0)) continue;
+                local town = GSStation.GetNearestTown(s);
+                if (!(town in town_stops)) town_stops[town] <- 0;
+                town_stops[town]++;
+            }
+            foreach (town, count in town_stops) {
+                if (count > best_stops) best_stops = count;
+            }
+            return { current = best_stops, target = obj.params.min_stops };
+        }
+        case ObjType.GROW_TOWN: {
+            local best_pop = 0;
+            if (quest != null && "towns" in quest) {
+                foreach (t in quest.towns) {
+                    if (GSTown.IsValidTown(t)) {
+                        local p = GSTown.GetPopulation(t);
+                        if (p > best_pop) best_pop = p;
+                    }
+                }
+            } else {
+                local tlist = GSTownList();
+                for (local t = tlist.Begin(); !tlist.IsEnd(); t = tlist.Next()) {
+                    local p = GSTown.GetPopulation(t);
+                    if (p > best_pop) best_pop = p;
+                }
+            }
+            return { current = best_pop, target = obj.params.target };
+        }
+        case ObjType.COMPANY_VALUE: {
+            local val = GSCompany.GetQuarterlyCompanyValue(company, GSCompany.CURRENT_QUARTER);
+            return { current = val, target = obj.params.amount };
+        }
+    }
+    return { current = 0, target = 1 };
+}
+
 function QuestManager::_CheckObjective(company, obj, quest, progress_key) {
     switch (obj.type) {
         case ObjType.BUY_VEHICLE:
@@ -219,17 +300,17 @@ function QuestManager::_CheckObjective(company, obj, quest, progress_key) {
         case ObjType.ROUTE_PROFIT:
             return this._CheckRouteProfit(company, obj.params);
         case ObjType.CONNECT_TOWNS_ROAD:
-            return this._CheckConnectedTowns(company, obj.params, GSVehicle.VT_ROAD);
+            return this._CheckConnectedTowns(company, obj.params, GSVehicle.VT_ROAD, quest);
         case ObjType.TRANSPORT_CARGO:
             return this._CheckTransportCargo(company, obj.params, quest, progress_key);
         case ObjType.CONNECT_TOWN_INTERNAL:
             return this._CheckConnectTownInternal(company, obj.params);
         case ObjType.CONNECT_TOWNS_RAIL:
-            return this._CheckConnectedTowns(company, obj.params, GSVehicle.VT_RAIL);
+            return this._CheckConnectedTowns(company, obj.params, GSVehicle.VT_RAIL, quest);
         case ObjType.TRANSPORT_PASSENGERS_RAIL:
             return this._CheckTransportPassengersRail(company, obj.params, quest, progress_key);
         case ObjType.GROW_TOWN:
-            return this._CheckGrowTown(company, obj.params);
+            return this._CheckGrowTown(company, obj.params, quest);
         case ObjType.RAIL_NETWORK:
             return this._CheckRailNetwork(company, obj.params);
         case ObjType.BUILD_DOCK_AND_SHIP:
@@ -280,7 +361,7 @@ function QuestManager::_CheckRouteProfit(company, params) {
     return total >= params.amount;
 }
 
-function QuestManager::_CheckConnectedTowns(company, params, vtype) {
+function QuestManager::_CheckConnectedTowns(company, params, vtype, quest = null) {
     local connected = {};
     local slist = GSStationList(
         vtype == GSVehicle.VT_ROAD ? GSStation.STATION_BUS_STOP :
@@ -296,6 +377,13 @@ function QuestManager::_CheckConnectedTowns(company, params, vtype) {
         }
     }
 
+    if (quest != null && "towns" in quest) {
+        foreach (qt in quest.towns) {
+            if (!(qt in connected)) return false;
+        }
+        return true;
+    }
+
     local count = 0;
     foreach (t, _ in connected) count++;
 
@@ -304,9 +392,25 @@ function QuestManager::_CheckConnectedTowns(company, params, vtype) {
 }
 
 function QuestManager::_CheckTransportCargo(company, params, quest, progress_key) {
+    if ("towns" in quest) {
+        local has_station = false;
+        local slist = GSStationList(GSStation.STATION_TRUCK_STOP);
+        for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
+            local town = GSStation.GetNearestTown(s);
+            foreach (qt in quest.towns) {
+                if (town == qt) { has_station = true; break; }
+            }
+            if (has_station) break;
+        }
+        if (!has_station) return false;
+    }
+
     local vlist = GSVehicleList();
     local total_profit = 0;
     for (local v = vlist.Begin(); !vlist.IsEnd(); v = vlist.Next()) {
+        local engine = GSVehicle.GetEngineType(v);
+        local cargo = GSEngine.GetCargoType(engine);
+        if (cargo == 0) continue;
         total_profit += GSVehicle.GetProfitLastYear(v);
     }
 
@@ -339,14 +443,38 @@ function QuestManager::_CheckConnectTownInternal(company, params) {
         town_stops[town]++;
     }
 
+    local has_stops = false;
     foreach (town, count in town_stops) {
-        if (count >= min_stops) return true;
+        if (count >= min_stops) { has_stops = true; break; }
     }
-    return false;
+    if (!has_stops) return false;
+
+    local min_pass = "min_passengers" in params ? params.min_passengers : 0;
+    if (min_pass > 0) {
+        local bus_profit = 0;
+        local vlist = GSVehicleList();
+        for (local v = vlist.Begin(); !vlist.IsEnd(); v = vlist.Next()) {
+            if (GSVehicle.GetVehicleType(v) != GSVehicle.VT_ROAD) continue;
+            local engine = GSVehicle.GetEngineType(v);
+            if (GSEngine.GetCargoType(engine) != 0) continue;
+            bus_profit += GSVehicle.GetProfitLastYear(v);
+        }
+        if (bus_profit < min_pass * 25) return false;
+    }
+
+    return true;
 }
 
-function QuestManager::_CheckGrowTown(company, params) {
+function QuestManager::_CheckGrowTown(company, params, quest = null) {
     local target = params.target;
+
+    if (quest != null && "towns" in quest) {
+        foreach (t in quest.towns) {
+            if (GSTown.IsValidTown(t) && GSTown.GetPopulation(t) >= target) return true;
+        }
+        return false;
+    }
+
     local tlist = GSTownList();
     for (local t = tlist.Begin(); !tlist.IsEnd(); t = tlist.Next()) {
         if (GSTown.GetPopulation(t) >= target) return true;
