@@ -51,10 +51,7 @@ function Rewards::_ApplyReputation(company, amount) {
             if (GSStation.HasCargoRating(station, 0)) {
                 local town = GSStation.GetNearestTown(station);
                 local pop = GSTown.GetPopulation(town);
-                if (pop > best_pop) {
-                    best_pop = pop;
-                    best_town = town;
-                }
+                if (pop > best_pop) { best_pop = pop; best_town = town; }
             }
         }
     }

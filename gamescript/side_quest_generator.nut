@@ -214,10 +214,7 @@ function SideQuestGenerator::_PickIndustryAndTown(tmpl, index) {
     local towns = GSTownList();
     for (local town = towns.Begin(); !towns.IsEnd(); town = towns.Next()) {
         local dist = GSMap.DistanceManhattan(ind_loc, GSTown.GetLocation(town));
-        if (dist < nearest_dist) {
-            nearest_dist = dist;
-            nearest_town = town;
-        }
+        if (dist < nearest_dist) { nearest_dist = dist; nearest_town = town; }
     }
 
     if (nearest_town < 0) return null;
@@ -254,7 +251,7 @@ function SideQuestGenerator::_PickOneTown(tmpl, index) {
 
     local params = clone tmpl.obj_params;
     if (tmpl.template == "city_builder") {
-        local target = (pop * 2 < 500) ? 500 : pop * 2;
+        local target = max(pop * 2, 500);
         params.target <- (target * tmpl.mult).tointeger();
     }
 

@@ -239,8 +239,7 @@ function QuestManager::GetObjectiveProgress(company, obj, quest) {
             local vehicles = GSVehicleList();
             for (local vehicle = vehicles.Begin(); !vehicles.IsEnd(); vehicle = vehicles.Next()) {
                 if (GSVehicle.GetVehicleType(vehicle) == obj.params.vehicle_type) {
-                    local profit = GSVehicle.GetProfitThisYear(vehicle);
-                    if (profit > best) best = profit;
+                    best = max(best, GSVehicle.GetProfitThisYear(vehicle));
                 }
             }
             return { current = best, target = obj.params.amount };
@@ -273,7 +272,7 @@ function QuestManager::GetObjectiveProgress(company, obj, quest) {
                 town_stops[town]++;
             }
             foreach (town, count in town_stops) {
-                if (count > best_stops) best_stops = count;
+                best_stops = max(best_stops, count);
             }
             return { current = best_stops, target = obj.params.min_stops };
         }
@@ -282,15 +281,13 @@ function QuestManager::GetObjectiveProgress(company, obj, quest) {
             if (quest != null && "towns" in quest) {
                 foreach (town_id in quest.towns) {
                     if (GSTown.IsValidTown(town_id)) {
-                        local population = GSTown.GetPopulation(town_id);
-                        if (population > best_pop) best_pop = population;
+                        best_pop = max(best_pop, GSTown.GetPopulation(town_id));
                     }
                 }
             } else {
                 local towns = GSTownList();
                 for (local town_id = towns.Begin(); !towns.IsEnd(); town_id = towns.Next()) {
-                    local population = GSTown.GetPopulation(town_id);
-                    if (population > best_pop) best_pop = population;
+                    best_pop = max(best_pop, GSTown.GetPopulation(town_id));
                 }
             }
             return { current = best_pop, target = obj.params.target };

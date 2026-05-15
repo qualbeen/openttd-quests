@@ -165,7 +165,7 @@ function QuestUI::UpdateProgress(company, quest_manager) {
             if (!GSGoal.IsValidGoal(goal_id)) continue;
 
             local progress = quest_manager.GetObjectiveProgress(company, obj, quest);
-            local cur = progress.current < progress.target ? progress.current : progress.target;
+            local cur = min(progress.current, progress.target);
             GSGoal.SetText(goal_id, GSText(GSText.STR_GOAL_PROGRESS, obj.desc, cur, progress.target));
         }
     }
