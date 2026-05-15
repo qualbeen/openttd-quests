@@ -9,9 +9,9 @@ function QuestUI::constructor() {
 }
 
 function QuestUI::InitPages(quest_manager) {
-    for (local c = GSCompany.COMPANY_FIRST; c <= GSCompany.COMPANY_LAST; c++) {
-        if (GSCompany.ResolveCompanyID(c) == GSCompany.COMPANY_INVALID) continue;
-        this.InitPagesForCompany(c, quest_manager);
+    for (local company = GSCompany.COMPANY_FIRST; company <= GSCompany.COMPANY_LAST; company++) {
+        if (GSCompany.ResolveCompanyID(company) == GSCompany.COMPANY_INVALID) continue;
+        this.InitPagesForCompany(company, quest_manager);
     }
 }
 
@@ -125,10 +125,10 @@ function QuestUI::OnQuestCompleted(quest_id, company, quest_manager) {
     }
 
     local newly_active = quest_manager.GetActiveQuests(company);
-    foreach (q in newly_active) {
-        if (!(q.id in this.company_pages[company])) {
-            this._CreateQuestPage(company, q);
-            this._CreateGoals(company, q);
+    foreach (quest in newly_active) {
+        if (!(quest.id in this.company_pages[company])) {
+            this._CreateQuestPage(company, quest);
+            this._CreateGoals(company, quest);
         }
     }
 

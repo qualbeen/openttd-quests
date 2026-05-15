@@ -43,10 +43,10 @@ function SaveLoad::SaveState(gs) {
         }
 
         foreach (reward in sq.rewards) {
-            local r = { type = reward.type };
-            if ("amount" in reward) r.amount <- reward.amount;
-            if ("tier" in reward) r.tier <- reward.tier;
-            sq_data.rewards.append(r);
+            local reward_data = { type = reward.type };
+            if ("amount" in reward) reward_data.amount <- reward.amount;
+            if ("tier" in reward) reward_data.tier <- reward.tier;
+            sq_data.rewards.append(reward_data);
         }
 
         data.side_quests.append(sq_data);
@@ -86,10 +86,10 @@ function SaveLoad::LoadState(gs, data) {
             }
 
             foreach (reward in sq_data.rewards) {
-                local r = { type = reward.type };
-                if ("amount" in reward) r.amount <- reward.amount;
-                if ("tier" in reward) r.tier <- reward.tier;
-                sq.rewards.append(r);
+                local reward_entry = { type = reward.type };
+                if ("amount" in reward) reward_entry.amount <- reward.amount;
+                if ("tier" in reward) reward_entry.tier <- reward.tier;
+                sq.rewards.append(reward_entry);
             }
 
             gs.quest_manager.AddSideQuest(sq);

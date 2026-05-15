@@ -36,7 +36,7 @@ enum RewardType {
 
 class QuestDefs {
     static function GetAll(difficulty_mult) {
-        local m = difficulty_mult;
+        local mult = difficulty_mult;
 
         return [
             // ========== TIER 0 (5 quests) ==========
@@ -54,7 +54,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (10000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (10000 * mult).tointeger() }
                 ],
                 story = "Every empire starts with a single vehicle. Buy your first road vehicle and begin your journey to transportation dominance."
             },
@@ -67,14 +67,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.ROUTE_PROFIT,
-                        params = { amount = (5000 * m).tointeger(), vehicle_type = GSVehicle.VT_ROAD },
-                        desc = "Earn " + (5000 * m).tointeger() + " from a single road vehicle"
+                        params = { amount = (5000 * mult).tointeger(), vehicle_type = GSVehicle.VT_ROAD },
+                        desc = "Earn " + (5000 * mult).tointeger() + " from a single road vehicle"
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (25000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (25000 * mult).tointeger() }
                 ],
-                story = "Prove your routes are profitable. Make a single road vehicle earn " + (5000 * m).tointeger() + " in lifetime profit."
+                story = "Prove your routes are profitable. Make a single road vehicle earn " + (5000 * mult).tointeger() + " in lifetime profit."
             },
 
             {
@@ -85,15 +85,15 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.CONNECT_TOWN_INTERNAL,
-                        params = { min_stops = 4, min_passengers = (200 * m).tointeger() },
-                        desc = "Build a city bus network with 4 stops and transport " + (200 * m).tointeger() + " passengers"
+                        params = { min_stops = 4, min_passengers = (200 * mult).tointeger() },
+                        desc = "Build a city bus network with 4 stops and transport " + (200 * mult).tointeger() + " passengers"
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (20000 * m).tointeger() },
+                    { type = RewardType.CASH, amount = (20000 * mult).tointeger() },
                     { type = RewardType.REPUTATION, amount = 200 }
                 ],
-                story = "Cities need internal transit. Build a network with at least 4 stops and move " + (200 * m).tointeger() + " passengers within a single town."
+                story = "Cities need internal transit. Build a network with at least 4 stops and move " + (200 * mult).tointeger() + " passengers within a single town."
             },
 
             {
@@ -109,7 +109,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (30000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (30000 * mult).tointeger() }
                 ],
                 story = "Expand your network beyond a single town. Link at least 3 towns together with profitable road routes."
             },
@@ -122,14 +122,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.TRANSPORT_CARGO,
-                        params = { amount = (200 * m).tointeger() },
-                        desc = "Transport " + (200 * m).tointeger() + " units of any cargo"
+                        params = { amount = (200 * mult).tointeger() },
+                        desc = "Transport " + (200 * mult).tointeger() + " units of any cargo"
                     }
                 ],
                 rewards = [
                     { type = RewardType.UNLOCK_TIER, tier = 1 }
                 ],
-                story = "Time to haul some freight! Transport " + (200 * m).tointeger() + " units of cargo to unlock rail technology."
+                story = "Time to haul some freight! Transport " + (200 * mult).tointeger() + " units of cargo to unlock rail technology."
             },
 
             // ========== TIER 1 (4 quests) ==========
@@ -147,7 +147,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (50000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (50000 * mult).tointeger() }
                 ],
                 story = "The age of rail has arrived. Lay down at least 20 tiles of track and connect 2 towns by railway."
             },
@@ -160,14 +160,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.TRANSPORT_PASSENGERS_RAIL,
-                        params = { amount = (500 * m).tointeger() },
-                        desc = "Transport " + (500 * m).tointeger() + " passengers by rail"
+                        params = { amount = (500 * mult).tointeger() },
+                        desc = "Transport " + (500 * mult).tointeger() + " passengers by rail"
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (40000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (40000 * mult).tointeger() }
                 ],
-                story = "Trains move people efficiently. Transport " + (500 * m).tointeger() + " passengers using your railway network."
+                story = "Trains move people efficiently. Transport " + (500 * mult).tointeger() + " passengers using your railway network."
             },
 
             {
@@ -178,14 +178,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.GROW_TOWN,
-                        params = { target = (1000 * m).tointeger() },
-                        desc = "Grow a town to " + (1000 * m).tointeger() + " population"
+                        params = { target = (1000 * mult).tointeger() },
+                        desc = "Grow a town to " + (1000 * mult).tointeger() + " population"
                     }
                 ],
                 rewards = [
                     { type = RewardType.REPUTATION, amount = 200 }
                 ],
-                story = "Good service attracts settlers. Grow any town to a population of " + (1000 * m).tointeger() + " through excellent transport."
+                story = "Good service attracts settlers. Grow any town to a population of " + (1000 * mult).tointeger() + " through excellent transport."
             },
 
             {
@@ -196,14 +196,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.RAIL_NETWORK,
-                        params = { min_towns = 5, min_tiles = 100, min_profit = (50000 * m).tointeger() },
-                        desc = "Build a network connecting 5 towns with 100 rail tiles, earning " + (50000 * m).tointeger() + " profit"
+                        params = { min_towns = 5, min_tiles = 100, min_profit = (50000 * mult).tointeger() },
+                        desc = "Build a network connecting 5 towns with 100 rail tiles, earning " + (50000 * mult).tointeger() + " profit"
                     }
                 ],
                 rewards = [
                     { type = RewardType.UNLOCK_TIER, tier = 2 }
                 ],
-                story = "Your railway empire expands. Connect 5 towns with 100+ tiles of track and earn " + (50000 * m).tointeger() + " to unlock maritime transport."
+                story = "Your railway empire expands. Connect 5 towns with 100+ tiles of track and earn " + (50000 * mult).tointeger() + " to unlock maritime transport."
             },
 
             // ========== TIER 2 (4 quests) ==========
@@ -221,7 +221,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (60000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (60000 * mult).tointeger() }
                 ],
                 story = "The seas beckon. Build a dock and put your first ship into service."
             },
@@ -234,14 +234,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.TRANSPORT_OIL,
-                        params = { amount = (500 * m).tointeger() },
-                        desc = "Transport " + (500 * m).tointeger() + " units of oil"
+                        params = { amount = (500 * mult).tointeger() },
+                        desc = "Transport " + (500 * mult).tointeger() + " units of oil"
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (75000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (75000 * mult).tointeger() }
                 ],
-                story = "Black gold flows through your network. Transport " + (500 * m).tointeger() + " units of oil to fuel the economy."
+                story = "Black gold flows through your network. Transport " + (500 * mult).tointeger() + " units of oil to fuel the economy."
             },
 
             {
@@ -252,14 +252,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.GROW_TOWN,
-                        params = { target = (3000 * m).tointeger() },
-                        desc = "Grow a town to " + (3000 * m).tointeger() + " population"
+                        params = { target = (3000 * mult).tointeger() },
+                        desc = "Grow a town to " + (3000 * mult).tointeger() + " population"
                     }
                 ],
                 rewards = [
                     { type = RewardType.REPUTATION, amount = 200 }
                 ],
-                story = "Create a thriving metropolis. Grow a town to " + (3000 * m).tointeger() + " citizens through multi-modal transport."
+                story = "Create a thriving metropolis. Grow a town to " + (3000 * mult).tointeger() + " citizens through multi-modal transport."
             },
 
             {
@@ -270,8 +270,8 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.COMPANY_VALUE,
-                        params = { amount = (500000 * m).tointeger() },
-                        desc = "Reach company value of " + (500000 * m).tointeger()
+                        params = { amount = (500000 * mult).tointeger() },
+                        desc = "Reach company value of " + (500000 * mult).tointeger()
                     },
                     {
                         type = ObjType.CONNECT_TOWNS_ROAD,
@@ -282,7 +282,7 @@ class QuestDefs {
                 rewards = [
                     { type = RewardType.UNLOCK_TIER, tier = 3 }
                 ],
-                story = "Your empire flourishes. Reach a company value of " + (500000 * m).tointeger() + " and connect 8 towns to unlock electric rail."
+                story = "Your empire flourishes. Reach a company value of " + (500000 * mult).tointeger() + " and connect 8 towns to unlock electric rail."
             },
 
             // ========== TIER 3 (4 quests) ==========
@@ -295,14 +295,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.BUILD_ELECTRIFIED_RAIL,
-                        params = { min_tiles = (20 * m).tointeger() },
-                        desc = "Build " + (20 * m).tointeger() + " tiles of electrified railway"
+                        params = { min_tiles = (20 * mult).tointeger() },
+                        desc = "Build " + (20 * mult).tointeger() + " tiles of electrified railway"
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (100000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (100000 * mult).tointeger() }
                 ],
-                story = "The future is electric. Build " + (20 * m).tointeger() + " tiles of electrified railway to modernize your network."
+                story = "The future is electric. Build " + (20 * mult).tointeger() + " tiles of electrified railway to modernize your network."
             },
 
             {
@@ -318,7 +318,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (80000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (80000 * mult).tointeger() }
                 ],
                 story = "Speed is the name of the game. Get an electric train to reach 100 km/h on your network."
             },
@@ -331,14 +331,14 @@ class QuestDefs {
                 objectives = [
                     {
                         type = ObjType.GROW_TOWN,
-                        params = { target = (10000 * m).tointeger() },
-                        desc = "Grow a town to " + (10000 * m).tointeger() + " population"
+                        params = { target = (10000 * mult).tointeger() },
+                        desc = "Grow a town to " + (10000 * mult).tointeger() + " population"
                     }
                 ],
                 rewards = [
                     { type = RewardType.REPUTATION, amount = 200 }
                 ],
-                story = "Build a true megacity. Grow a town to " + (10000 * m).tointeger() + " population with world-class transport infrastructure."
+                story = "Build a true megacity. Grow a town to " + (10000 * mult).tointeger() + " population with world-class transport infrastructure."
             },
 
             {
@@ -354,14 +354,14 @@ class QuestDefs {
                     },
                     {
                         type = ObjType.COMPANY_VALUE,
-                        params = { amount = (1000000 * m).tointeger() },
-                        desc = "Reach company value of " + (1000000 * m).tointeger()
+                        params = { amount = (1000000 * mult).tointeger() },
+                        desc = "Reach company value of " + (1000000 * mult).tointeger()
                     }
                 ],
                 rewards = [
                     { type = RewardType.UNLOCK_TIER, tier = 4 }
                 ],
-                story = "Diversify and dominate. Transport 5 cargo types and reach " + (1000000 * m).tointeger() + " company value to unlock aviation."
+                story = "Diversify and dominate. Transport 5 cargo types and reach " + (1000000 * mult).tointeger() + " company value to unlock aviation."
             },
 
             // ========== TIER 4 (3 quests) ==========
@@ -379,7 +379,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (150000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (150000 * mult).tointeger() }
                 ],
                 story = "Take to the skies! Build an airport and put your first aircraft into operation."
             },
@@ -397,7 +397,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (200000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (200000 * mult).tointeger() }
                 ],
                 story = "Connect distant lands by air. Establish a profitable route spanning at least 200 tiles."
             },
@@ -440,7 +440,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (300000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (300000 * mult).tointeger() }
                 ],
                 story = "Embrace cutting-edge technology. Build 50 tiles of monorail to revolutionize your network."
             },
@@ -458,7 +458,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (250000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (250000 * mult).tointeger() }
                 ],
                 story = "Push the limits of speed. Get a monorail vehicle to reach 200 km/h on your network."
             },
@@ -476,14 +476,14 @@ class QuestDefs {
                     },
                     {
                         type = ObjType.COMPANY_VALUE,
-                        params = { amount = (5000000 * m).tointeger() },
-                        desc = "Reach company value of " + (5000000 * m).tointeger()
+                        params = { amount = (5000000 * mult).tointeger() },
+                        desc = "Reach company value of " + (5000000 * mult).tointeger()
                     }
                 ],
                 rewards = [
                     { type = RewardType.UNLOCK_TIER, tier = 6 }
                 ],
-                story = "Your network spans the continent. Connect 20 towns with 500 tiles of rail and reach " + (5000000 * m).tointeger() + " value to unlock maglev."
+                story = "Your network spans the continent. Connect 20 towns with 500 tiles of rail and reach " + (5000000 * mult).tointeger() + " value to unlock maglev."
             },
 
             // ========== TIER 6 (2 quests) ==========
@@ -501,7 +501,7 @@ class QuestDefs {
                     }
                 ],
                 rewards = [
-                    { type = RewardType.CASH, amount = (500000 * m).tointeger() }
+                    { type = RewardType.CASH, amount = (500000 * mult).tointeger() }
                 ],
                 story = "The ultimate in rail technology. Build maglev track and put a magnetic levitation train into service."
             },
@@ -519,19 +519,19 @@ class QuestDefs {
                     },
                     {
                         type = ObjType.COMPANY_VALUE,
-                        params = { amount = (10000000 * m).tointeger() },
-                        desc = "Reach company value of " + (10000000 * m).tointeger()
+                        params = { amount = (10000000 * mult).tointeger() },
+                        desc = "Reach company value of " + (10000000 * mult).tointeger()
                     },
                     {
                         type = ObjType.TOTAL_POP_SERVED,
-                        params = { amount = (50000 * m).tointeger() },
-                        desc = "Serve a total population of " + (50000 * m).tointeger() + " across all towns"
+                        params = { amount = (50000 * mult).tointeger() },
+                        desc = "Serve a total population of " + (50000 * mult).tointeger() + " across all towns"
                     }
                 ],
                 rewards = [
                     { type = RewardType.VICTORY }
                 ],
-                story = "The ultimate achievement. Connect 30 towns, reach " + (10000000 * m).tointeger() + " company value, and serve " + (50000 * m).tointeger() + " citizens to become the Transport Master!"
+                story = "The ultimate achievement. Connect 30 towns, reach " + (10000000 * mult).tointeger() + " company value, and serve " + (50000 * mult).tointeger() + " citizens to become the Transport Master!"
             }
         ];
     }

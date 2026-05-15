@@ -5,16 +5,16 @@ class EngineClassifier {
     constructor() {
         this.engine_tiers = {};
         this.tier_engines = {};
-        for (local t = 0; t <= 6; t++) {
-            this.tier_engines[t] <- [];
+        for (local tier = 0; tier <= 6; tier++) {
+            this.tier_engines[tier] <- [];
         }
     }
 }
 
 function EngineClassifier::ClassifyAll() {
     this.engine_tiers = {};
-    for (local t = 0; t <= 6; t++) {
-        this.tier_engines[t] = [];
+    for (local tier = 0; tier <= 6; tier++) {
+        this.tier_engines[tier] = [];
     }
 
     this._ClassifyByType(GSVehicle.VT_ROAD);
@@ -31,15 +31,15 @@ function EngineClassifier::_ClassifyByType(vtype) {
     local list = GSEngineList(vtype);
 
     if (vtype == GSVehicle.VT_AIR) {
-        for (local e = list.Begin(); !list.IsEnd(); e = list.Next()) {
-            this._Assign(e, 4);
+        for (local engine = list.Begin(); !list.IsEnd(); engine = list.Next()) {
+            this._Assign(engine, 4);
         }
         return;
     }
 
     if (vtype == GSVehicle.VT_WATER) {
-        for (local e = list.Begin(); !list.IsEnd(); e = list.Next()) {
-            this._Assign(e, 2);
+        for (local engine = list.Begin(); !list.IsEnd(); engine = list.Next()) {
+            this._Assign(engine, 2);
         }
         return;
     }
@@ -56,8 +56,8 @@ function EngineClassifier::_ClassifyByType(vtype) {
 }
 
 function EngineClassifier::_ClassifyRoadVehicles(list) {
-    for (local e = list.Begin(); !list.IsEnd(); e = list.Next()) {
-        this._Assign(e, 0);
+    for (local engine = list.Begin(); !list.IsEnd(); engine = list.Next()) {
+        this._Assign(engine, 0);
     }
 }
 
@@ -65,26 +65,26 @@ function EngineClassifier::_ClassifyTrains(list) {
     local normal_engines = [];
     local normal_speeds = [];
 
-    for (local e = list.Begin(); !list.IsEnd(); e = list.Next()) {
-        local rail_type = GSEngine.GetRailType(e);
+    for (local engine = list.Begin(); !list.IsEnd(); engine = list.Next()) {
+        local rail_type = GSEngine.GetRailType(engine);
         local rt_name = GSRail.GetName(rail_type);
 
         if (rt_name == null) {
-            this._Assign(e, 1);
+            this._Assign(engine, 1);
             continue;
         }
 
         local rt_lower = rt_name.tolower();
 
         if (rt_lower.find("maglev") != null) {
-            this._Assign(e, 6);
+            this._Assign(engine, 6);
         } else if (rt_lower.find("mono") != null) {
-            this._Assign(e, 5);
+            this._Assign(engine, 5);
         } else if (rt_lower.find("elec") != null || rt_lower.find("elrl") != null) {
-            this._Assign(e, 3);
+            this._Assign(engine, 3);
         } else {
-            normal_engines.append(e);
-            normal_speeds.append(GSEngine.GetMaxSpeed(e));
+            normal_engines.append(engine);
+            normal_speeds.append(GSEngine.GetMaxSpeed(engine));
         }
     }
 
@@ -94,11 +94,11 @@ function EngineClassifier::_ClassifyTrains(list) {
     sorted_speeds.sort(function(a, b) { if (a < b) return -1; if (a > b) return 1; return 0; });
     local median_speed = sorted_speeds[sorted_speeds.len() / 2];
 
-    foreach (idx, e in normal_engines) {
+    foreach (idx, engine in normal_engines) {
         if (normal_speeds[idx] <= median_speed) {
-            this._Assign(e, 1);
+            this._Assign(engine, 1);
         } else {
-            this._Assign(e, 2);
+            this._Assign(engine, 2);
         }
     }
 }
@@ -117,11 +117,11 @@ function EngineClassifier::GetEngineTier(engine_id) {
 }
 
 function EngineClassifier::LockAllAboveTier(max_tier) {
-    for (local c = GSCompany.COMPANY_FIRST; c <= GSCompany.COMPANY_LAST; c++) {
-        if (GSCompany.ResolveCompanyID(c) == GSCompany.COMPANY_INVALID) continue;
+    for (local company = GSCompany.COMPANY_FIRST; company <= GSCompany.COMPANY_LAST; company++) {
+        if (GSCompany.ResolveCompanyID(company) == GSCompany.COMPANY_INVALID) continue;
         foreach (engine_id, tier in this.engine_tiers) {
             if (tier > max_tier) {
-                GSEngine.DisableForCompany(engine_id, c);
+                GSEngine.DisableForCompany(engine_id, company);
             }
         }
     }
@@ -130,10 +130,10 @@ function EngineClassifier::LockAllAboveTier(max_tier) {
 
 function EngineClassifier::UnlockTier(tier) {
     local engines = this.GetTierEngines(tier);
-    for (local c = GSCompany.COMPANY_FIRST; c <= GSCompany.COMPANY_LAST; c++) {
-        if (GSCompany.ResolveCompanyID(c) == GSCompany.COMPANY_INVALID) continue;
-        foreach (e in engines) {
-            GSEngine.EnableForCompany(e, c);
+    for (local company = GSCompany.COMPANY_FIRST; company <= GSCompany.COMPANY_LAST; company++) {
+        if (GSCompany.ResolveCompanyID(company) == GSCompany.COMPANY_INVALID) continue;
+        foreach (engine in engines) {
+            GSEngine.EnableForCompany(engine, company);
         }
     }
     GSLog.Info("Unlocked tier " + tier + " (" + engines.len() + " engines) for all companies");
@@ -141,8 +141,8 @@ function EngineClassifier::UnlockTier(tier) {
 
 function EngineClassifier::UnlockTierForCompany(tier, company) {
     local engines = this.GetTierEngines(tier);
-    foreach (e in engines) {
-        GSEngine.EnableForCompany(e, company);
+    foreach (engine in engines) {
+        GSEngine.EnableForCompany(engine, company);
     }
 }
 

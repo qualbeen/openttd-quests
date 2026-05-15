@@ -40,9 +40,9 @@ function SideQuestGenerator::Generate(quest_manager) {
 
 function SideQuestGenerator::_GetTemplates() {
     local diff = GSController.GetSetting("difficulty");
-    local m = 1.0;
-    if (diff == 0) m = 0.5;
-    if (diff == 2) m = 2.0;
+    local multiplier = 1.0;
+    if (diff == 0) multiplier = 0.5;
+    if (diff == 2) multiplier = 2.0;
 
     return [
         {
@@ -54,7 +54,7 @@ function SideQuestGenerator::_GetTemplates() {
             reward_min = 10000, reward_max = 20000,
             check_type = ObjType.CONNECT_TOWNS_ROAD,
             obj_params = { min_towns = 2 },
-            mult = m
+            mult = multiplier
         },
         {
             template = "cargo_hauler",
@@ -64,8 +64,8 @@ function SideQuestGenerator::_GetTemplates() {
             needs = "industry_and_town",
             reward_min = 15000, reward_max = 25000,
             check_type = ObjType.TRANSPORT_CARGO,
-            obj_params = { amount = (100 * m).tointeger() },
-            mult = m
+            obj_params = { amount = (100 * multiplier).tointeger() },
+            mult = multiplier
         },
         {
             template = "passenger_line",
@@ -75,8 +75,8 @@ function SideQuestGenerator::_GetTemplates() {
             needs = "two_towns",
             reward_min = 30000, reward_max = 45000,
             check_type = ObjType.TRANSPORT_PASSENGERS_RAIL,
-            obj_params = { amount = (300 * m).tointeger() },
-            mult = m
+            obj_params = { amount = (300 * multiplier).tointeger() },
+            mult = multiplier
         },
         {
             template = "city_builder",
@@ -87,7 +87,7 @@ function SideQuestGenerator::_GetTemplates() {
             reward_min = 35000, reward_max = 50000,
             check_type = ObjType.GROW_TOWN,
             obj_params = {},
-            mult = m
+            mult = multiplier
         },
         {
             template = "island_supply",
@@ -98,7 +98,7 @@ function SideQuestGenerator::_GetTemplates() {
             reward_min = 40000, reward_max = 60000,
             check_type = ObjType.BUILD_DOCK_AND_SHIP,
             obj_params = {},
-            mult = m
+            mult = multiplier
         },
         {
             template = "jet_setter",
@@ -109,7 +109,7 @@ function SideQuestGenerator::_GetTemplates() {
             reward_min = 80000, reward_max = 120000,
             check_type = ObjType.AIR_BRIDGE,
             obj_params = { min_distance = 100 },
-            mult = m
+            mult = multiplier
         }
     ];
 }
@@ -211,12 +211,12 @@ function SideQuestGenerator::_PickIndustryAndTown(tmpl, index) {
 
     local nearest_town = -1;
     local nearest_dist = 999999;
-    local tlist = GSTownList();
-    for (local t = tlist.Begin(); !tlist.IsEnd(); t = tlist.Next()) {
-        local dist = GSMap.DistanceManhattan(ind_loc, GSTown.GetLocation(t));
+    local towns = GSTownList();
+    for (local town = towns.Begin(); !towns.IsEnd(); town = towns.Next()) {
+        local dist = GSMap.DistanceManhattan(ind_loc, GSTown.GetLocation(town));
         if (dist < nearest_dist) {
             nearest_dist = dist;
-            nearest_town = t;
+            nearest_town = town;
         }
     }
 
@@ -245,11 +245,11 @@ function SideQuestGenerator::_PickOneTown(tmpl, index) {
     local town_count = GSTown.GetTownCount();
     if (town_count == 0) return null;
 
-    local t = GSBase.RandRange(town_count);
-    if (!GSTown.IsValidTown(t)) return null;
+    local town = GSBase.RandRange(town_count);
+    if (!GSTown.IsValidTown(town)) return null;
 
-    local name = GSTown.GetName(t);
-    local pop = GSTown.GetPopulation(t);
+    local name = GSTown.GetName(town);
+    local pop = GSTown.GetPopulation(town);
     local reward = tmpl.reward_min + GSBase.RandRange(tmpl.reward_max - tmpl.reward_min);
 
     local params = clone tmpl.obj_params;
@@ -277,6 +277,6 @@ function SideQuestGenerator::_PickOneTown(tmpl, index) {
         ],
         rewards = [{ type = RewardType.CASH, amount = reward }],
         story = desc + ". A worthy challenge!",
-        towns = [t]
+        towns = [town]
     };
 }

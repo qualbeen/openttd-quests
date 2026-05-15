@@ -46,10 +46,10 @@ function Rewards::_ApplyReputation(company, amount) {
 
     local stypes = [GSStation.STATION_BUS_STOP, GSStation.STATION_TRAIN, GSStation.STATION_DOCK, GSStation.STATION_AIRPORT];
     foreach (st in stypes) {
-        local slist = GSStationList(st);
-        for (local s = slist.Begin(); !slist.IsEnd(); s = slist.Next()) {
-            if (GSStation.HasCargoRating(s, 0)) {
-                local town = GSStation.GetNearestTown(s);
+        local stations = GSStationList(st);
+        for (local station = stations.Begin(); !stations.IsEnd(); station = stations.Next()) {
+            if (GSStation.HasCargoRating(station, 0)) {
+                local town = GSStation.GetNearestTown(station);
                 local pop = GSTown.GetPopulation(town);
                 if (pop > best_pop) {
                     best_pop = pop;

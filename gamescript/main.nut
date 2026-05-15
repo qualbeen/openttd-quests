@@ -33,8 +33,8 @@ function QuestSystem::Start() {
         this.engine_classifier.LockAllAboveTier(0);
 
         local start_tier = GSController.GetSetting("start_tier");
-        for (local t = 1; t <= start_tier; t++) {
-            this.engine_classifier.UnlockTier(t);
+        for (local tier = 1; tier <= start_tier; tier++) {
+            this.engine_classifier.UnlockTier(tier);
         }
 
         SideQuestGenerator.Generate(this.quest_manager);
@@ -52,28 +52,28 @@ function QuestSystem::Start() {
 }
 
 function QuestSystem::_HandleCompanies() {
-    for (local c = GSCompany.COMPANY_FIRST; c <= GSCompany.COMPANY_LAST; c++) {
-        if (GSCompany.ResolveCompanyID(c) == GSCompany.COMPANY_INVALID) continue;
+    for (local company = GSCompany.COMPANY_FIRST; company <= GSCompany.COMPANY_LAST; company++) {
+        if (GSCompany.ResolveCompanyID(company) == GSCompany.COMPANY_INVALID) continue;
 
-        local completed = this.quest_manager.CheckConditions(c, this.engine_classifier);
+        local completed = this.quest_manager.CheckConditions(company, this.engine_classifier);
         foreach (quest_id in completed) {
-            this.rewards.Apply(quest_id, c, this.quest_manager, this.engine_classifier);
-            this.quest_ui.OnQuestCompleted(quest_id, c, this.quest_manager);
+            this.rewards.Apply(quest_id, company, this.quest_manager, this.engine_classifier);
+            this.quest_ui.OnQuestCompleted(quest_id, company, this.quest_manager);
         }
 
-        this.quest_ui.UpdateProgress(c, this.quest_manager);
+        this.quest_ui.UpdateProgress(company, this.quest_manager);
     }
 }
 
 function QuestSystem::_CheckNewCompanies() {
-    for (local c = GSCompany.COMPANY_FIRST; c <= GSCompany.COMPANY_LAST; c++) {
-        if (GSCompany.ResolveCompanyID(c) == GSCompany.COMPANY_INVALID) continue;
-        if (this.quest_manager.HasCompany(c)) continue;
+    for (local company = GSCompany.COMPANY_FIRST; company <= GSCompany.COMPANY_LAST; company++) {
+        if (GSCompany.ResolveCompanyID(company) == GSCompany.COMPANY_INVALID) continue;
+        if (this.quest_manager.HasCompany(company)) continue;
 
-        this.quest_manager.AddCompany(c);
-        this.engine_classifier.ApplyLocksForCompany(c, this.quest_manager.GetUnlockedTiers(c));
-        this.quest_ui.InitPagesForCompany(c, this.quest_manager);
-        GSLog.Info("New company " + c + " joined, initialized at Tier 0.");
+        this.quest_manager.AddCompany(company);
+        this.engine_classifier.ApplyLocksForCompany(company, this.quest_manager.GetUnlockedTiers(company));
+        this.quest_ui.InitPagesForCompany(company, this.quest_manager);
+        GSLog.Info("New company " + company + " joined, initialized at Tier 0.");
     }
 }
 
