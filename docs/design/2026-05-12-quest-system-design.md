@@ -60,7 +60,7 @@ At game start, the classifier scans every engine via `GSEngineList` and assigns 
 
 1. **Aircraft** → Tier 4
 2. **Ships** → Tier 2
-3. **Road vehicles**: split by price relative to median. Cheaper half → Tier 0 (starter), expensive half → split by speed into Tier 1 / Tier 4
+3. **Road vehicles**: all assigned to Tier 0 (ensures vehicles are available from game start regardless of NewGRFs)
 4. **Trains by rail type**:
    - Maglev → Tier 6
    - Monorail → Tier 5
@@ -73,8 +73,7 @@ This works with any NewGRF vehicle set — no hardcoded engine IDs.
 ### Engine availability rules
 
 - At game start: `DisableForCompany()` all engines above Tier 0 for all companies
-- On tier unlock: `EnableForCompany()` all engines in that tier
-- Engines with a future `GetDesignDate()`: enabled when both the tier is unlocked AND the game date reaches the design date
+- On tier unlock: engines in that tier become available naturally via their design dates (we do NOT call `EnableForCompany()` to avoid overriding design dates and making future vehicles available too early)
 - New companies joining mid-game: immediately apply current unlock state
 
 ## Progression Quests
@@ -102,7 +101,7 @@ This works with any NewGRF vehicle set — no hardcoded engine IDs.
 
 ### Tier 3 — Electrification
 14. **"Power Up"** — Build 20 tiles of electrified rail. Reward: $100,000
-15. **"High Speed"** — Run an electric train over 100 km/h. Reward: Reduced running costs (temporary)
+15. **"High Speed"** — Run an electric train over 100 km/h. Reward: $80,000
 16. **"Megacity"** — Grow a town to 10,000 pop. Reward: Town reputation boost
 17. **"Industrial Giant"** *(gate)* — Transport 5 different cargo types + $1M value. Reward: **Unlocks Tier 4**
 
@@ -118,7 +117,7 @@ This works with any NewGRF vehicle set — no hardcoded engine IDs.
 
 ### Tier 6 — Maglev Mastery
 24. **"Levitation"** — Build a maglev line and run a train. Reward: $500,000
-25. **"Master of Transport"** *(final)* — 30 towns, $10M value, 50k population served. Reward: Victory
+25. **"Transport Master"** *(final)* — 30 towns, $10M value, 50k population served. Reward: Victory
 
 ## Side Quests
 
@@ -136,14 +135,10 @@ Generated at game start from map data. Each side quest references actual towns a
 |----------|----------|---------|-------------|
 | Town Express | 0 | Run buses between {Town A} and {Town B} | $10k-20k |
 | Cargo Hauler | 0 | Truck {amount} cargo from {Industry} to {Town} | $15k-25k |
-| Coal Run | 1 | Deliver {amount} coal from {Mine} to {Power Station} | $25k-40k |
 | Passenger Line | 1 | Transport {amount} passengers by train between {Town A} and {Town B} | $30k-45k |
-| Island Supply | 2 | Ship goods to the most remote town | $40k-60k |
-| Bulk Shipping | 2 | Ship {amount} cargo between ports | $45k-65k |
-| City Builder | 1 | Grow {Town} by {factor}x its starting population | $35k-50k |
-| Metro Service | 0 | Build {N} bus stops within {Town} (all in same authority area), transport {amount} passengers internally | $15k-30k |
-| One-Way System | 0 | Build a one-way street network in {Town} spanning {X}+ tiles. Only straight one-way segments count — turns and crossings are excluded. At most 20% of road tiles in the network may be turns/crossings | $20k-35k |
-| Jet Setter | 4 | Fly {amount} passengers between {City A} and {City B} | $80k-120k |
+| City Builder | 1 | Grow {Town} to {target} population | $35k-50k |
+| Island Supply | 2 | Ship goods to {Town} | $40k-60k |
+| Jet Setter | 4 | Fly passengers between {City A} and {City B} (min 100 tiles apart) | $80k-120k |
 
 ## Quest UI
 
@@ -178,22 +173,20 @@ All state serialized via the GS `Save()` function returning a table:
 
 ```
 {
-  version: 1,
+  version: 2,
   companies: {
     0: {
       unlocked_tiers: [0, 1, 2],
-      quest_states: { "tier0_first_wheels": "completed", "tier1_iron_road": "in_progress", ... },
-      quest_progress: { "tier1_passenger_express": { passengers: 342 }, ... },
-      side_quests: [ { id: "side_1", template: "coal_run", mine_id: 5, station_id: 12, ... }, ... ]
+      quest_states: { "tier0_first_wheels": "completed", "tier1_iron_road": "active", ... },
+      quest_progress: { ... }
     },
     ...
   },
-  engine_tiers: { 0: [1, 3, 5, 7], 1: [10, 11, 15], ... },
-  side_quest_pool: [ ... ]
+  side_quests: [ { id: "side_0", name: "...", tier: 0, objectives: [...], rewards: [...], story: "..." }, ... ]
 }
 ```
 
-On load, the classifier does NOT re-scan engines — it uses the saved tier map to ensure consistency (engines don't shift tiers mid-game if a NewGRF somehow changes).
+Engine tiers are NOT saved — the classifier re-scans all engines on load via `ClassifyAll()`. This avoids serializing 8000+ engine IDs (which caused "script took too long to Save" errors with large NewGRF sets) and is safe because engine classification is deterministic.
 
 ## Configurable Settings (info.nut)
 
