@@ -1,0 +1,48 @@
+quests:
+  - id: tier6_levitation
+    name: "Levitation"
+    tier: 6
+    prerequisites:
+      - tier5_continental_network
+    archipelago:
+      location_id: 100024
+    objectives:
+      - type: build_maglev
+        desc: "Build maglev infrastructure and operate a maglev train"
+    rewards:
+      - type: cash
+        amount: 500000
+        archipelago:
+          item_id: 200024
+    story: >
+      The ultimate in rail technology. Build maglev track and put a
+      magnetic levitation train into service.
+
+  - id: tier6_master
+    name: "Transport Master"
+    tier: 6
+    prerequisites:
+      - tier6_levitation
+    archipelago:
+      location_id: 100025
+    objectives:
+      - type: connect_towns_road
+        params:
+          min_towns: 30
+        desc: "Connect 30 towns by road"
+      - type: company_value
+        params:
+          amount: 10000000
+        desc: "Reach company value of {amount}"
+      - type: total_pop_served
+        params:
+          amount: 50000
+        desc: "Serve a total population of {amount} across all towns"
+    rewards:
+      - type: victory
+        archipelago:
+          item_id: 200025
+    story: >
+      The ultimate achievement. Connect 30 towns, reach {1.amount}
+      company value, and serve {2.amount} citizens to become the
+      Transport Master!

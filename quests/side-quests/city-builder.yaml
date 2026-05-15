@@ -1,0 +1,13 @@
+template: city_builder
+tier: 1
+name_fmt: "Grow %s"
+desc_fmt: "Grow %s to %d population"
+needs: one_town
+objective_type: grow_town
+objective_params: {}
+dynamic_params:
+  target: "max(pop * 2, 500)"
+reward_range:
+  min: 35000
+  max: 50000
+story_suffix: "A worthy challenge!"

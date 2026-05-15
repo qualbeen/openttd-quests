@@ -1,5 +1,5 @@
-// Quest Definitions
-// Defines all objective types, reward types, and the 25 progression quests
+// AUTO-GENERATED from quests/progression/*.yaml
+// Do not edit manually — run: python3 scripts/generate_quest_defs.py
 
 enum ObjType {
     BUY_VEHICLE,
@@ -533,6 +533,7 @@ class QuestDefs {
                 ],
                 story = "The ultimate achievement. Connect 30 towns, reach " + (10000000 * mult).tointeger() + " company value, and serve " + (50000 * mult).tointeger() + " citizens to become the Transport Master!"
             }
+
         ];
     }
 }

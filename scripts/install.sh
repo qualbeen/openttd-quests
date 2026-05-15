@@ -4,6 +4,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 GS_DIR="$SCRIPT_DIR/gamescript"
 
+echo "Generating quest definitions from YAML..."
+python3 "$SCRIPT_DIR/scripts/generate_quest_defs.py" || { echo "Error: Quest generation failed. Is PyYAML installed? (pip install pyyaml)"; exit 1; }
+
 case "$(uname)" in
     Darwin) DEST="$HOME/Documents/OpenTTD/game/openttd-quests" ;;
     Linux)  DEST="$HOME/.openttd/game/openttd-quests" ;;

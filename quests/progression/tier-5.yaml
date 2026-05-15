@@ -1,0 +1,68 @@
+quests:
+  - id: tier5_future_is_now
+    name: "The Future Is Now"
+    tier: 5
+    prerequisites:
+      - tier4_transport_mogul
+    archipelago:
+      location_id: 100021
+    objectives:
+      - type: build_monorail
+        params:
+          min_tiles: 50
+        desc: "Build 50 tiles of monorail"
+    rewards:
+      - type: cash
+        amount: 300000
+        archipelago:
+          item_id: 200021
+    story: >
+      Embrace cutting-edge technology. Build 50 tiles of monorail
+      to revolutionize your network.
+
+  - id: tier5_speed_demon
+    name: "Speed Demon"
+    tier: 5
+    prerequisites:
+      - tier5_future_is_now
+    archipelago:
+      location_id: 100022
+    objectives:
+      - type: monorail_speed
+        params:
+          min_speed: 200
+        desc: "Operate a monorail reaching 200 km/h"
+    rewards:
+      - type: cash
+        amount: 250000
+        archipelago:
+          item_id: 200022
+    story: >
+      Push the limits of speed. Get a monorail vehicle to reach
+      200 km/h on your network.
+
+  - id: tier5_continental_network
+    name: "Continental Network"
+    tier: 5
+    prerequisites:
+      - tier5_speed_demon
+    archipelago:
+      location_id: 100023
+    objectives:
+      - type: network_size
+        params:
+          min_towns: 20
+          min_tiles: 500
+        desc: "Connect 20 towns with 500 tiles of track"
+      - type: company_value
+        params:
+          amount: 5000000
+        desc: "Reach company value of {amount}"
+    rewards:
+      - type: unlock_tier
+        tier: 6
+        archipelago:
+          item_id: 200023
+    story: >
+      Your network spans the continent. Connect 20 towns with 500
+      tiles of rail and reach {1.amount} value to unlock maglev.

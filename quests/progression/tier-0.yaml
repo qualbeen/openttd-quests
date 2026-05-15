@@ -1,0 +1,104 @@
+quests:
+  - id: tier0_first_wheels
+    name: "First Wheels"
+    tier: 0
+    prerequisites: []
+    archipelago:
+      location_id: 100001
+    objectives:
+      - type: buy_vehicle
+        params:
+          count: 1
+        desc: "Purchase your first vehicle"
+    rewards:
+      - type: cash
+        amount: 10000
+        archipelago:
+          item_id: 200001
+    story: >
+      Every empire starts with a single vehicle. Buy your first road
+      vehicle and begin your journey to transportation dominance.
+
+  - id: tier0_bus_baron
+    name: "Bus Baron"
+    tier: 0
+    prerequisites: []
+    archipelago:
+      location_id: 100002
+    objectives:
+      - type: route_profit
+        params:
+          amount: 5000
+          vehicle_type: road
+        desc: "Earn {amount} from a single road vehicle"
+    rewards:
+      - type: cash
+        amount: 25000
+        archipelago:
+          item_id: 200002
+    story: >
+      Prove your routes are profitable. Make a single road vehicle
+      earn {amount} in lifetime profit.
+
+  - id: tier0_city_transit
+    name: "City Transit"
+    tier: 0
+    prerequisites: []
+    archipelago:
+      location_id: 100003
+    objectives:
+      - type: connect_town_internal
+        params:
+          min_stops: 4
+          min_passengers: 200
+        desc: "Build a city bus network with 4 stops and transport {min_passengers} passengers"
+    rewards:
+      - type: cash
+        amount: 20000
+        archipelago:
+          item_id: 200003
+      - type: reputation
+        amount: 200
+    story: >
+      Cities need internal transit. Build a network with at least
+      4 stops and move {min_passengers} passengers within a single town.
+
+  - id: tier0_connect_dots
+    name: "Connect the Dots"
+    tier: 0
+    prerequisites: []
+    archipelago:
+      location_id: 100004
+    objectives:
+      - type: connect_towns_road
+        params:
+          min_towns: 3
+        desc: "Connect at least 3 towns with road routes"
+    rewards:
+      - type: cash
+        amount: 30000
+        archipelago:
+          item_id: 200004
+    story: >
+      Expand your network beyond a single town. Link at least 3
+      towns together with profitable road routes.
+
+  - id: tier0_truckers_life
+    name: "Trucker's Life"
+    tier: 0
+    prerequisites: []
+    archipelago:
+      location_id: 100005
+    objectives:
+      - type: transport_cargo
+        params:
+          amount: 200
+        desc: "Transport {amount} units of any cargo"
+    rewards:
+      - type: unlock_tier
+        tier: 1
+        archipelago:
+          item_id: 200005
+    story: >
+      Time to haul some freight! Transport {amount} units of cargo
+      to unlock rail technology.

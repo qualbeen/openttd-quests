@@ -5,6 +5,13 @@ set "SCRIPT_DIR=%~dp0.."
 set "GS_DIR=%SCRIPT_DIR%\gamescript"
 set "DEST=%USERPROFILE%\Documents\OpenTTD\game\openttd-quests"
 
+echo Generating quest definitions from YAML...
+python3 "%SCRIPT_DIR%\scripts\generate_quest_defs.py"
+if errorlevel 1 (
+    echo Error: Quest generation failed. Is PyYAML installed? ^(pip install pyyaml^)
+    exit /b 1
+)
+
 if not exist "%GS_DIR%" (
     echo Error: gamescript directory not found at %GS_DIR%
     exit /b 1

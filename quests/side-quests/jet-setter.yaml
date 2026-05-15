@@ -1,0 +1,14 @@
+template: jet_setter
+tier: 4
+name_fmt: "Flights to %s"
+desc_fmt: "Fly passengers between %s and %s"
+needs: two_towns_far
+picker_params:
+  min_distance: 100
+objective_type: air_bridge
+objective_params:
+  min_distance: 100
+reward_range:
+  min: 80000
+  max: 120000
+story_suffix: "Show them what air travel can do!"

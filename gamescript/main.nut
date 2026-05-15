@@ -1,6 +1,7 @@
 require("engine_classifier.nut");
 require("quest_defs.nut");
 require("quest_manager.nut");
+require("side_quest_templates.nut");
 require("side_quest_generator.nut");
 require("quest_ui.nut");
 require("rewards.nut");

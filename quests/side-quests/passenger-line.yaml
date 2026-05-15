@@ -1,0 +1,12 @@
+template: passenger_line
+tier: 1
+name_fmt: "Rail to %s"
+desc_fmt: "Transport passengers by train between %s and %s"
+needs: two_towns
+objective_type: transport_passengers_rail
+objective_params:
+  amount: 300
+reward_range:
+  min: 30000
+  max: 45000
+story_suffix: "The people are counting on you!"

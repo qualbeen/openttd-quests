@@ -1,0 +1,86 @@
+quests:
+  - id: tier1_iron_road
+    name: "The Iron Road"
+    tier: 1
+    prerequisites:
+      - tier0_truckers_life
+    archipelago:
+      location_id: 100006
+    objectives:
+      - type: connect_towns_rail
+        params:
+          min_towns: 2
+          min_tiles: 20
+        desc: "Connect 2 towns with at least 20 tiles of railway"
+    rewards:
+      - type: cash
+        amount: 50000
+        archipelago:
+          item_id: 200006
+    story: >
+      The age of rail has arrived. Lay down at least 20 tiles of
+      track and connect 2 towns by railway.
+
+  - id: tier1_passenger_express
+    name: "Passenger Express"
+    tier: 1
+    prerequisites:
+      - tier1_iron_road
+    archipelago:
+      location_id: 100007
+    objectives:
+      - type: transport_passengers_rail
+        params:
+          amount: 500
+        desc: "Transport {amount} passengers by rail"
+    rewards:
+      - type: cash
+        amount: 40000
+        archipelago:
+          item_id: 200007
+    story: >
+      Trains move people efficiently. Transport {amount} passengers
+      using your railway network.
+
+  - id: tier1_growing_pains
+    name: "Growing Pains"
+    tier: 1
+    prerequisites:
+      - tier1_iron_road
+    archipelago:
+      location_id: 100008
+    objectives:
+      - type: grow_town
+        params:
+          target: 1000
+        desc: "Grow a town to {target} population"
+    rewards:
+      - type: reputation
+        amount: 200
+    story: >
+      Good service attracts settlers. Grow any town to a population
+      of {target} through excellent transport.
+
+  - id: tier1_rail_network
+    name: "Rail Network"
+    tier: 1
+    prerequisites:
+      - tier1_passenger_express
+      - tier1_growing_pains
+    archipelago:
+      location_id: 100009
+    objectives:
+      - type: rail_network
+        params:
+          min_towns: 5
+          min_tiles: 100
+          min_profit: 50000
+        desc: "Build a network connecting 5 towns with 100 rail tiles, earning {min_profit} profit"
+    rewards:
+      - type: unlock_tier
+        tier: 2
+        archipelago:
+          item_id: 200009
+    story: >
+      Your railway empire expands. Connect 5 towns with 100+ tiles
+      of track and earn {min_profit} to unlock maritime transport.

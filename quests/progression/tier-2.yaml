@@ -1,0 +1,84 @@
+quests:
+  - id: tier2_set_sail
+    name: "Set Sail"
+    tier: 2
+    prerequisites:
+      - tier1_rail_network
+    archipelago:
+      location_id: 100010
+    objectives:
+      - type: build_dock_and_ship
+        desc: "Build a dock and operate a ship"
+    rewards:
+      - type: cash
+        amount: 60000
+        archipelago:
+          item_id: 200010
+    story: >
+      The seas beckon. Build a dock and put your first ship into service.
+
+  - id: tier2_oil_tycoon
+    name: "Oil Tycoon"
+    tier: 2
+    prerequisites:
+      - tier2_set_sail
+    archipelago:
+      location_id: 100011
+    objectives:
+      - type: transport_oil
+        params:
+          amount: 500
+        desc: "Transport {amount} units of oil"
+    rewards:
+      - type: cash
+        amount: 75000
+        archipelago:
+          item_id: 200011
+    story: >
+      Black gold flows through your network. Transport {amount}
+      units of oil to fuel the economy.
+
+  - id: tier2_metropolis
+    name: "Metropolis"
+    tier: 2
+    prerequisites:
+      - tier2_set_sail
+    archipelago:
+      location_id: 100012
+    objectives:
+      - type: grow_town
+        params:
+          target: 3000
+        desc: "Grow a town to {target} population"
+    rewards:
+      - type: reputation
+        amount: 200
+    story: >
+      Create a thriving metropolis. Grow a town to {target} citizens
+      through multi-modal transport.
+
+  - id: tier2_trade_empire
+    name: "Trade Empire"
+    tier: 2
+    prerequisites:
+      - tier2_oil_tycoon
+      - tier2_metropolis
+    archipelago:
+      location_id: 100013
+    objectives:
+      - type: company_value
+        params:
+          amount: 500000
+        desc: "Reach company value of {amount}"
+      - type: connect_towns_road
+        params:
+          min_towns: 8
+        desc: "Connect 8 towns by road"
+    rewards:
+      - type: unlock_tier
+        tier: 3
+        archipelago:
+          item_id: 200013
+    story: >
+      Your empire flourishes. Reach a company value of {amount} and
+      connect 8 towns to unlock electric rail.

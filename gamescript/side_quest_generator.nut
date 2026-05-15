@@ -43,75 +43,7 @@ function SideQuestGenerator::_GetTemplates() {
     local multiplier = 1.0;
     if (diff == 0) multiplier = 0.5;
     if (diff == 2) multiplier = 2.0;
-
-    return [
-        {
-            template = "town_express",
-            tier = 0,
-            name_fmt = "Express to %s",
-            desc_fmt = "Run a bus between %s and %s",
-            needs = "two_towns",
-            reward_min = 10000, reward_max = 20000,
-            check_type = ObjType.CONNECT_TOWNS_ROAD,
-            obj_params = { min_towns = 2 },
-            mult = multiplier
-        },
-        {
-            template = "cargo_hauler",
-            tier = 0,
-            name_fmt = "Hauler for %s",
-            desc_fmt = "Truck cargo from %s to %s",
-            needs = "industry_and_town",
-            reward_min = 15000, reward_max = 25000,
-            check_type = ObjType.TRANSPORT_CARGO,
-            obj_params = { amount = (100 * multiplier).tointeger() },
-            mult = multiplier
-        },
-        {
-            template = "passenger_line",
-            tier = 1,
-            name_fmt = "Rail to %s",
-            desc_fmt = "Transport passengers by train between %s and %s",
-            needs = "two_towns",
-            reward_min = 30000, reward_max = 45000,
-            check_type = ObjType.TRANSPORT_PASSENGERS_RAIL,
-            obj_params = { amount = (300 * multiplier).tointeger() },
-            mult = multiplier
-        },
-        {
-            template = "city_builder",
-            tier = 1,
-            name_fmt = "Grow %s",
-            desc_fmt = "Grow %s to %d population",
-            needs = "one_town",
-            reward_min = 35000, reward_max = 50000,
-            check_type = ObjType.GROW_TOWN,
-            obj_params = {},
-            mult = multiplier
-        },
-        {
-            template = "island_supply",
-            tier = 2,
-            name_fmt = "Supply %s by sea",
-            desc_fmt = "Ship goods to %s",
-            needs = "one_town",
-            reward_min = 40000, reward_max = 60000,
-            check_type = ObjType.BUILD_DOCK_AND_SHIP,
-            obj_params = {},
-            mult = multiplier
-        },
-        {
-            template = "jet_setter",
-            tier = 4,
-            name_fmt = "Flights to %s",
-            desc_fmt = "Fly passengers between %s and %s",
-            needs = "two_towns_far",
-            reward_min = 80000, reward_max = 120000,
-            check_type = ObjType.AIR_BRIDGE,
-            obj_params = { min_distance = 100 },
-            mult = multiplier
-        }
-    ];
+    return SideQuestTemplates.GetAll(multiplier);
 }
 
 function SideQuestGenerator::_GenerateFromTemplate(tmpl, index) {

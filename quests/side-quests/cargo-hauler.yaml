@@ -1,0 +1,13 @@
+template: cargo_hauler
+tier: 0
+name_fmt: "Hauler for %s"
+desc_fmt: "Truck cargo from %s to %s"
+needs: industry_and_town
+objective_type: transport_cargo
+objective_params:
+  amount: 100
+reward_range:
+  min: 15000
+  max: 25000
+story_suffix: "Can you deliver?"
+story_override: "The folks in {town} need supplies from {industry}. Can you deliver?"

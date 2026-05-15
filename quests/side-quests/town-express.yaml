@@ -1,0 +1,12 @@
+template: town_express
+tier: 0
+name_fmt: "Express to %s"
+desc_fmt: "Run a bus between %s and %s"
+needs: two_towns
+objective_type: connect_towns_road
+objective_params:
+  min_towns: 2
+reward_range:
+  min: 10000
+  max: 20000
+story_suffix: "The people are counting on you!"

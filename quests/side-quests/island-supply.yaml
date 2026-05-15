@@ -1,0 +1,11 @@
+template: island_supply
+tier: 2
+name_fmt: "Supply %s by sea"
+desc_fmt: "Ship goods to %s"
+needs: one_town
+objective_type: build_dock_and_ship
+objective_params: {}
+reward_range:
+  min: 40000
+  max: 60000
+story_suffix: "A worthy challenge!"

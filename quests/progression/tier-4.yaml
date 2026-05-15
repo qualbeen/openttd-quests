@@ -1,0 +1,63 @@
+quests:
+  - id: tier4_wright_brothers
+    name: "Wright Brothers"
+    tier: 4
+    prerequisites:
+      - tier3_industrial_giant
+    archipelago:
+      location_id: 100018
+    objectives:
+      - type: build_airport_and_fly
+        desc: "Build an airport and operate an aircraft"
+    rewards:
+      - type: cash
+        amount: 150000
+        archipelago:
+          item_id: 200018
+    story: >
+      Take to the skies! Build an airport and put your first aircraft
+      into operation.
+
+  - id: tier4_air_bridge
+    name: "Air Bridge"
+    tier: 4
+    prerequisites:
+      - tier4_wright_brothers
+    archipelago:
+      location_id: 100019
+    objectives:
+      - type: air_bridge
+        params:
+          min_distance: 200
+        desc: "Operate an air route spanning 200 tiles"
+    rewards:
+      - type: cash
+        amount: 200000
+        archipelago:
+          item_id: 200019
+    story: >
+      Connect distant lands by air. Establish a profitable route
+      spanning at least 200 tiles.
+
+  - id: tier4_transport_mogul
+    name: "Transport Mogul"
+    tier: 4
+    prerequisites:
+      - tier4_air_bridge
+    archipelago:
+      location_id: 100020
+    objectives:
+      - type: connect_towns_road
+        params:
+          min_towns: 15
+        desc: "Connect 15 towns by road"
+      - type: all_transport_types
+        desc: "Operate all transport types: road, rail, water, and air"
+    rewards:
+      - type: unlock_tier
+        tier: 5
+        archipelago:
+          item_id: 200020
+    story: >
+      Master all modes of transport. Connect 15 towns by road and
+      operate road, rail, ship, and air vehicles to unlock monorail.

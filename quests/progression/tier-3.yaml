@@ -1,0 +1,87 @@
+quests:
+  - id: tier3_power_up
+    name: "Power Up"
+    tier: 3
+    prerequisites:
+      - tier2_trade_empire
+    archipelago:
+      location_id: 100014
+    objectives:
+      - type: build_electrified_rail
+        params:
+          min_tiles: { value: 20, scaled: true }
+        desc: "Build {min_tiles} tiles of electrified railway"
+    rewards:
+      - type: cash
+        amount: 100000
+        archipelago:
+          item_id: 200014
+    story: >
+      The future is electric. Build {min_tiles} tiles of electrified
+      railway to modernize your network.
+
+  - id: tier3_high_speed
+    name: "High Speed Rail"
+    tier: 3
+    prerequisites:
+      - tier3_power_up
+    archipelago:
+      location_id: 100015
+    objectives:
+      - type: electric_train_speed
+        params:
+          min_speed: 100
+        desc: "Operate an electric train reaching 100 km/h"
+    rewards:
+      - type: cash
+        amount: 80000
+        archipelago:
+          item_id: 200015
+    story: >
+      Speed is the name of the game. Get an electric train to reach
+      100 km/h on your network.
+
+  - id: tier3_megacity
+    name: "Megacity"
+    tier: 3
+    prerequisites:
+      - tier3_power_up
+    archipelago:
+      location_id: 100016
+    objectives:
+      - type: grow_town
+        params:
+          target: 10000
+        desc: "Grow a town to {target} population"
+    rewards:
+      - type: reputation
+        amount: 200
+    story: >
+      Build a true megacity. Grow a town to {target} population with
+      world-class transport infrastructure.
+
+  - id: tier3_industrial_giant
+    name: "Industrial Giant"
+    tier: 3
+    prerequisites:
+      - tier3_high_speed
+      - tier3_megacity
+    archipelago:
+      location_id: 100017
+    objectives:
+      - type: transport_cargo_types
+        params:
+          count: 5
+        desc: "Transport at least 5 different cargo types"
+      - type: company_value
+        params:
+          amount: 1000000
+        desc: "Reach company value of {amount}"
+    rewards:
+      - type: unlock_tier
+        tier: 4
+        archipelago:
+          item_id: 200017
+    story: >
+      Diversify and dominate. Transport 5 cargo types and reach
+      {1.amount} company value to unlock aviation.
