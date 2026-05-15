@@ -230,7 +230,7 @@ function QuestManager::CheckConditions(company, classifier) {
 function QuestManager::_VehicleProfit(v) {
     local last = GSVehicle.GetProfitLastYear(v);
     local this_year = GSVehicle.GetProfitThisYear(v);
-    return last > this_year ? last : this_year;
+    return max(last, this_year);
 }
 
 function QuestManager::GetObjectiveProgress(company, obj, quest) {
